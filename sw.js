@@ -1,7 +1,8 @@
 const CACHE_PREFIX = "manutencaoJa-";
-const CACHE_NAME = `${CACHE_PREFIX}v2`;
+const CACHE_NAME = `${CACHE_PREFIX}v3`;
 const SHELL_ASSETS = [
   "./",
+  "./index.html",
   "./login.html",
   "./dashboard.html",
   "./pedido.html",
