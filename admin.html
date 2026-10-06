@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="pt-PT">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestão de pedidos — ManutençãoJá</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#003B73" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+  </head>
+  <body data-page="admin">
+    <div class="app-layout">
+      <aside class="sidebar" id="appSidebar">
+        <div class="sidebar-header"><a class="logo-wrapper" href="dashboard.html"><img src="logo.png" alt="" width="32"><h2>ManutençãoJá</h2></a><button class="icon-btn close-sidebar mobile-only" id="closeSidebar" aria-label="Fechar menu">×</button></div>
+        <div class="sidebar-content">
+          <div class="nav-section-title">Principal</div>
+          <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-link" data-nav="dashboard"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+            <a href="pedido.html" class="nav-link" data-nav="pedido"><i data-lucide="wrench"></i> Novo pedido</a>
+            <a href="meus-pedidos.html" class="nav-link" data-nav="meus-pedidos"><i data-lucide="list-checks"></i> Os meus pedidos</a>
+            <a href="admin.html" class="nav-link" data-nav="admin" data-admin-nav hidden><i data-lucide="shield-check"></i> Gestão de pedidos</a>
+          </nav>
+          <nav class="sidebar-nav account-nav"><a href="https://antoniorappleton.github.io/" class="nav-link text-danger" data-signout><i data-lucide="log-out"></i> Terminar sessão</a></nav>
+        </div>
+      </aside>
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+      <div class="main-wrapper">
+        <header class="top-bar"><div class="top-bar-left"><button class="icon-btn menu-btn mobile-only" id="openSidebar" aria-label="Abrir menu"><i data-lucide="menu"></i></button><h1 class="page-title">Gestão de pedidos</h1></div><a href="dashboard.html" class="profile-avatar" aria-label="Dashboard"><i data-lucide="user"></i></a></header>
+        <main class="content-area">
+          <div id="pageMessage" class="notice" role="status" hidden></div>
+          <div class="section-heading"><div><h2>Pedidos de manutenção</h2><p class="text-muted"><strong id="adminPendingCount">0</strong> pedidos pendentes de avaliação.</p></div></div>
+          <section id="adminPedidos"><p class="text-muted">A carregar pedidos…</p></section>
+        </main>
+        <nav class="bottom-nav mobile-only"><a href="dashboard.html" class="nav-item" data-nav="dashboard"><i data-lucide="layout-dashboard"></i><span>Início</span></a><a href="pedido.html" class="nav-item" data-nav="pedido"><i data-lucide="wrench"></i><span>Pedir</span></a><a href="meus-pedidos.html" class="nav-item" data-nav="meus-pedidos"><i data-lucide="list-checks"></i><span>Pedidos</span></a></nav>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="https://antoniorappleton.github.io/direcao-turma/js/core/config.js"></script>
+    <script src="https://antoniorappleton.github.io/direcao-turma/js/core/session.js"></script>
+    <script src="https://antoniorappleton.github.io/direcao-turma/js/core/auth.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

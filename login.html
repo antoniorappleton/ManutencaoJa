@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="pt-PT">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Iniciar sessão — ManutençãoJá</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#003B73" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="https://antoniorappleton.github.io/direcao-turma/js/core/config.js"></script>
+    <script src="https://antoniorappleton.github.io/direcao-turma/js/core/session.js"></script>
+    <script src="https://antoniorappleton.github.io/direcao-turma/js/core/auth.js"></script>
+  </head>
+  <body class="auth-container">
+    <main class="auth-wrapper animate-in">
+      <section class="auth-card">
+        <a class="auth-back" href="https://antoniorappleton.github.io/">← Comunidade CSJ</a>
+        <div class="auth-header">
+          <img class="auth-logo" src="logo.png" alt="ManutençãoJá" />
+          <h1>Entrar na ManutençãoJá</h1>
+          <p>Use a conta escolar que já utiliza nas outras aplicações da Comunidade CSJ.</p>
+        </div>
+        <form id="loginForm" class="auth-form">
+          <div class="form-group">
+            <label for="email">Email do colégio</label>
+            <input id="email" name="email" type="email" class="form-control" autocomplete="username" placeholder="nome.apelido@colegio-ramalhao.com" required />
+          </div>
+          <div class="form-group">
+            <label for="password">Palavra-passe</label>
+            <input id="password" name="password" type="password" class="form-control" autocomplete="current-password" required />
+          </div>
+          <div id="loginMessage" class="notice" role="alert" hidden></div>
+          <button class="btn btn-primary btn-block" type="submit">Entrar</button>
+        </form>
+        <p class="auth-help">A primeira entrada e a criação de contas seguem o processo da Direção de Turma.</p>
+      </section>
+    </main>
+    <script>
+      const form = document.getElementById("loginForm");
+      const message = document.getElementById("loginMessage");
+      const requestedReturnTo = new URLSearchParams(location.search).get("returnTo") || "";
+      const allowedPages = ["dashboard.html", "pedido.html", "meus-pedidos.html", "admin.html"];
+      const returnTo = allowedPages.includes(requestedReturnTo) ? requestedReturnTo : "dashboard.html";
+
+      if ("serviceWorker" in navigator && location.protocol === "https:") {
+        navigator.serviceWorker.register("./sw.js").catch((error) => {
+          console.error("ManutençãoJá service worker registration failed", error);
+        });
+      }
+
+      function showLoginMessage(text) {
+        message.textContent = text;
+        message.hidden = !text;
+      }
+
+      // Mesma regra da Direção de Turma (professores.deve_mudar_password):
+      // quem ainda está na password por omissão tem de a mudar lá antes de
+      // continuar — a ManutençãoJá não tem o seu próprio ecrã para isso,
+      // reutiliza o da Direção de Turma, já que a conta é partilhada.
+      async function redirectAfterLogin() {
+        const professor = await getCurrentProfessor();
+        if (professor?.deve_mudar_password) {
+          location.replace("https://antoniorappleton.github.io/direcao-turma/mudar-password.html");
+          return;
+        }
+        location.replace(returnTo);
+      }
+
+      async function continueIfSignedIn() {
+        if (window.supabaseReady) await window.supabaseReady;
+        const session = await getCurrentSession();
+        if (session) {
+          await redirectAfterLogin();
+          return true;
+        }
+        return false;
+      }
+
+      continueIfSignedIn().catch((error) => {
+        console.error("ManutençãoJá session check failed", error);
+        showLoginMessage("Não foi possível verificar a sessão. Tente novamente.");
+      });
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        showLoginMessage("");
+        const button = form.querySelector("button[type=submit]");
+        button.disabled = true;
+        button.textContent = "A entrar…";
+        try {
+          if (window.supabaseReady) await window.supabaseReady;
+          if (!window.supabase) throw new Error("Não foi possível ligar ao serviço de autenticação.");
+          const { error } = await signIn(
+            document.getElementById("email").value,
+            document.getElementById("password").value,
+          );
+          if (error) throw error;
+          await redirectAfterLogin();
+        } catch (error) {
+          console.error("ManutençãoJá sign-in failed", error);
+          showLoginMessage(error.message || "Não foi possível iniciar sessão.");
+          button.disabled = false;
+          button.textContent = "Entrar";
+        }
+      });
+    </script>
+  </body>
+</html>

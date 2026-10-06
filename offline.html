@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ManutençãoJá - Offline</title>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body
+    style="
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: var(--color-bg);
+      padding: 2rem;
+      text-align: center;
+    "
+  >
+    <div>
+      <div
+        style="font-size: 4rem; color: var(--color-navy); margin-bottom: 1rem"
+      >
+        <i data-lucide="wifi-off"></i>
+      </div>
+      <h1 style="color: var(--color-navy); margin-bottom: 0.5rem">
+        Sem ligação
+      </h1>
+      <p
+        style="
+          color: var(--color-text-muted);
+          margin-bottom: 2rem;
+          max-width: 400px;
+        "
+      >
+        Estás offline. Verifica a tua ligação e recarrega a página.
+      </p>
+      <button
+        onclick="window.location.reload()"
+        style="
+          background: var(--color-navy);
+          color: white;
+          border: none;
+          padding: 1rem 2rem;
+          border-radius: var(--radius-full);
+          font-weight: 600;
+          cursor: pointer;
+        "
+      >
+        Tentar novamente
+      </button>
+    </div>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>
