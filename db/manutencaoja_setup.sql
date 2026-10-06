@@ -16,6 +16,11 @@ BEGIN;
 
 ALTER TABLE public.professores ADD COLUMN IF NOT EXISTS manutencaoja_admin boolean NOT NULL DEFAULT false;
 
+-- Sequence à parte (em vez de SERIAL/IDENTITY), para o código legível
+-- MAN-<ano>-<nº> poder ser gerado no DEFAULT da coluna `codigo` abaixo. Tem
+-- de existir antes da tabela, já que o DEFAULT a referencia.
+CREATE SEQUENCE IF NOT EXISTS public.manutencaoja_codigo_seq;
+
 CREATE TABLE IF NOT EXISTS public.manutencaoja_pedidos (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   codigo text NOT NULL DEFAULT (
@@ -41,10 +46,6 @@ CREATE TABLE IF NOT EXISTS public.manutencaoja_pedidos (
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now()
 );
-
--- Sequence à parte (em vez de SERIAL/IDENTITY) para o código legível
--- MAN-<ano>-<nº> poder ser gerado no DEFAULT da coluna acima.
-CREATE SEQUENCE IF NOT EXISTS public.manutencaoja_codigo_seq;
 
 CREATE TABLE IF NOT EXISTS public.manutencaoja_pedidos_historico (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
